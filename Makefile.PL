@@ -1,0 +1,25 @@
+use ExtUtils::MakeMaker;
+
+# See lib/ExtUtils/MakeMaker.pm for details of how to influence
+# the contents of the Makefile that is written.
+
+WriteMakefile
+(
+	($] ge '5.005') ?
+	(
+		'AUTHOR' => 'Ron Savage (ron@savage.net.au)',
+		'ABSTRACT' => 'Convert db data to HTML popup_menu or radio group',
+    ) : (),
+	clean				=>
+	{
+		FILES			=> 'blib/* Makefile MANIFEST DBIx-HTML-PopupRadio-*'
+	},
+	dist				=>
+	{
+		COMPRESS		=> 'gzip',
+		SUFFIX			=> 'gz'
+	},
+	DISTNAME			=> 'DBIx-HTML-PopupRadio',
+	NAME				=> 'DBIx::HTML::PopupRadio',
+	VERSION_FROM		=> 'PopupRadio.pm',
+);

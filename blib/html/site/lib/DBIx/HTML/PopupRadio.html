@@ -1,0 +1,223 @@
+<HTML>
+<HEAD>
+<TITLE>C<DBIx::HTML::PopupRadio> - Convert sql into a popup menu or radio group.</TITLE>
+<LINK REV="made" HREF="mailto:">
+</HEAD>
+
+<BODY>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+
+<UL>
+
+	<LI><A HREF="#name">NAME</A></LI>
+	<LI><A HREF="#synopsis">Synopsis</A></LI>
+	<LI><A HREF="#description">Description</A></LI>
+	<LI><A HREF="#distributions">Distributions</A></LI>
+	<LI><A HREF="#usage">Usage</A></LI>
+	<LI><A HREF="#options">Options</A></LI>
+	<LI><A HREF="#methods">Methods</A></LI>
+	<LI><A HREF="#sample code">Sample Code</A></LI>
+	<LI><A HREF="#see also">See Also</A></LI>
+	<LI><A HREF="#author">Author</A></LI>
+	<LI><A HREF="#copyright">Copyright</A></LI>
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<H1><A NAME="name">NAME</A></H1>
+<P><CODE>DBIx::HTML::PopupRadio</CODE> - Convert sql into a popup menu or radio group.</P>
+<P>
+<HR>
+<H1><A NAME="synopsis">Synopsis</A></H1>
+<PRE>
+        use DBIx::HTML::PopupRadio;</PRE>
+<PRE>
+        my($popup_object) = DBIx::HTML::PopupRadio -&gt; new
+        (
+                dbh =&gt; $dbh,
+                sql =&gt; 'select campus_id, campus_name from campus order by campus_name',
+        );</PRE>
+<PRE>
+        $popup_object -&gt; set(default =&gt; '1');</PRE>
+<PRE>
+        my($popup_menu)  = $popup_object -&gt; popup_menu();
+        my($radio_group) = $popup_object -&gt; radio_group();</PRE>
+<PRE>
+        print $popup_menu;</PRE>
+<P>
+<HR>
+<H1><A NAME="description">Description</A></H1>
+<P>This module takes a db handle and an SQL statement, and builds a hash.</P>
+<P>Then you ask for that hash in HTML, as a popup menu or as a radio group.</P>
+<P>The reading of the db table is delayed until you actually call one of the
+methods 'popup_menu' or 'radio_group'. Even then, it is delayed until any
+parameters passed in to these 2 methods are processed.</P>
+<P>After a call to one of these 2 methods, you can call the 'size' method if
+you need to check how many rows were returned by the SQL you used.</P>
+<P>Neither the module CGI.pm, nor any of that kidney, are used by this module.
+We simply output pure HTML.</P>
+<P>
+<HR>
+<H1><A NAME="distributions">Distributions</A></H1>
+<P>This module is available both as a Unix-style distro (*.tgz) and an
+ActiveState-style distro (*.ppd). The latter is shipped in a *.zip file.</P>
+<P>See <A HREF="http://savage.net.au/Perl-modules/html/installing-a-module.html">http://savage.net.au/Perl-modules/html/installing-a-module.html</A> for
+help on unpacking and installing each type of distro.</P>
+<P>
+<HR>
+<H1><A NAME="usage">Usage</A></H1>
+<P>You create an object of the class by calling the constructor, 'new'.</P>
+<P>You then call 'set', if you wish, to set any options.</P>
+<P>Now call 'popup_menu' or 'radio_group' to get the HTML.</P>
+<P>Lastly, display the HTML as part of a form.</P>
+<P>The method names 'popup_menu' and 'radio_group' (and 'param') were chosen to be
+reminiscent of methods with the same names in the CGI.pm module. But let
+me repeat, my module does not use CGI.</P>
+<P>
+<HR>
+<H1><A NAME="options">Options</A></H1>
+<P>Here, in alphabetical order, are the options accepted by the constructor,
+together with their default values.</P>
+<DL>
+<DT><STRONG><A NAME="item_dbh_%3D%3E_%27%27">dbh =&gt; ''</A></STRONG><BR>
+<DD>
+Pass in an open database handle.
+<P>This option is mandatory, in the call to new, set, popup_menu or radio_group.
+Ie By the time you call one of the latter 2 methods, dbh must be set.</P>
+<P></P>
+<DT><STRONG><A NAME="item_default_%3D%3E_%27%27">default =&gt; ''</A></STRONG><BR>
+<DD>
+Pass in the string which is to be the default item on the popup menu or radio
+group. You supply here the visible menu item, not the value associated with
+that menu item.
+<P>See the discussion of the sql option for details about the menu items.</P>
+<P>This option is not mandatory.</P>
+<P></P>
+<DT><STRONG><A NAME="item_linebreak_%3D%3E_0">linebreak =&gt; 0</A></STRONG><BR>
+<DD>
+Pass in 1 if you want each radio group item on a separate line, ie separated
+by &lt;br /&gt;s.
+<P>This option is not mandatory.</P>
+<P></P>
+<DT><STRONG><A NAME="item_name_%3D%3E_%27dbix_menu%27">name =&gt; 'dbix_menu'</A></STRONG><BR>
+<DD>
+Pass in the name of the form item to use for the popup menu or radio group.
+<P>This option is not mandatory, since it has a default value. It could be unset
+and then reset, but must have a value by the time you call popup_menu or
+radio_group.</P>
+<P>The value of this parameter is what you will pass into a CGI object when you
+call its <A HREF="#item_param"><CODE>param()</CODE></A> method to retrieve the user's selection.</P>
+<P>Hence you would do something like:</P>
+<PRE>
+        my($name)         = 'fancy_menu';
+        my($popup_object) = DBIx::HTML::PopupRadio -&gt; new(name =&gt; $name, ...);
+        my($q)            = CGI -&gt; new();
+        my($id)           = $q -&gt; param($name) || '';</PRE>
+<P></P>
+<DT><STRONG><A NAME="item_prompt_%3D%3E_%27%27">prompt =&gt; ''</A></STRONG><BR>
+<DD>
+Pass in a prompt to use as the first entry in the popup menu.
+<P>The string can contain a single quote but not a double quote.</P>
+<P>This string will be both a visible menu item and the value returned to yoru
+CGI script if the user selects this menu item.</P>
+<P>This option is not mandatory.</P>
+<P></P>
+<DT><STRONG><A NAME="item_sql_%3D%3E_%27%27">sql =&gt; ''</A></STRONG><BR>
+<DD>
+Pass in the SQL used to select the popup menu or radio group items.
+<P>This option is mandatory, in the call to new, set, popup_menu or radio_group.
+Ie By the time you call one of the latter 2 methods, sql must be set.</P>
+<P>The SQL must select 2 columns. The first will be used as the value returned by
+a CGI object, for example, when you call its <A HREF="#item_param"><CODE>param()</CODE></A> method. The second value
+will be used as the visible selection offered to the user on the menu.</P>
+<P>Of course, the 2 columns selected could be the same:</P>
+<PRE>
+        $obj -&gt; set(sql =&gt; 'select campus_name, campus_name from campus order by campus_name');</PRE>
+<P>But normally you would do this:</P>
+<PRE>
+        $obj -&gt; set(sql =&gt; 'select campus_id, campus_name from campus order by campus_name');</PRE>
+<P>This means that the second column is used to construct visible menu items, and
+when an item is selected by the user, the first column is what is returned to your
+CGI script.</P>
+<P>The question remains: After you do something like this:</P>
+<PRE>
+        my($q)     = CGI -&gt; new();
+        my($id)    = $q -&gt; param('dbxi_menu') || '';</PRE>
+<P>how do you convert the value, eg campus_id, back into the visible menu item, eg
+campus_name.</P>
+<P>Simple: You call the param method of the DBIx::HTML::PopupRadio class:</P>
+<PRE>
+        my($name) = $popup_object -&gt; param($id);</PRE>
+<P>param returns the empty string if the value of $id is unknown.</P>
+<P></P></DL>
+<P>
+<HR>
+<H1><A NAME="methods">Methods</A></H1>
+<DL>
+<DT><STRONG><A NAME="item_new">new(%arg): The constructor</A></STRONG><BR>
+<DD>
+See the previous section for details.
+<P></P>
+<DT><STRONG><A NAME="item_param">param($id): Returns visible menu item corresponding to menu value</A></STRONG><BR>
+<DD>
+Call this to convert the value returned to the CGI script when the user
+slected a menu item, into the visible menu item selected by the user.
+<P>In other words, convert the first column of the SQL into the second column.</P>
+<P></P>
+<DT><STRONG><A NAME="item_popup_menu">popup_menu(%arg): Return the HTML for a popup menu</A></STRONG><BR>
+<DD>
+<A HREF="#item_popup_menu"><CODE>popup_menu(%arg)</CODE></A> takes the same parameters as new().
+<P></P>
+<DT><STRONG><A NAME="item_radio_group">radio_group(%arg): Return the HTML for a radio group</A></STRONG><BR>
+<DD>
+<A HREF="#item_radio_group"><CODE>radio_group(%arg)</CODE></A> takes the same parameters as new().
+<P></P>
+<DT><STRONG><A NAME="item_set">set(%arg): Set class member options</A></STRONG><BR>
+<DD>
+Call this to set options after calling new().
+<P><A HREF="#item_set"><CODE>set(%arg)</CODE></A> takes the same parameters as new().</P>
+<P></P>
+<DT><STRONG><A NAME="item_size">size(): Return the number of rows returned by your SQL</A></STRONG><BR>
+<DD>
+Call this after callling 'popup_menu' or 'radio_group'.
+<P>It will tell you whether or not your menu is empty.</P>
+<P></P></DL>
+<P>
+<HR>
+<H1><A NAME="sample code">Sample Code</A></H1>
+<P>See examples/*.cgi for complete programs, both simple and complex.</P>
+<P>You will need to run examples/bootstrap-menus.pl to load the 'test'
+database, 'campus' table, with sample data.</P>
+<P>You'll have to patch these 2 programs vis-a-vis the db vendor, username
+and password.</P>
+<P>The sample data in bootstrap-menus.pl is simple, but is used by several
+modules, so don't be too keen on changing it :-).</P>
+<P>
+<HR>
+<H1><A NAME="see also">See Also</A></H1>
+<PRE>
+        DBIx::HTML::LinkedMenus
+        DBIx::CSS::TreeMenu
+        DBIx::CSS::TabMenu</PRE>
+<P>These modules will be released after the current one.</P>
+<P>
+<HR>
+<H1><A NAME="author">Author</A></H1>
+<P><CODE>DBIx::HTML::PopupRadio</CODE> was written by Ron Savage <EM>&lt;<A HREF="mailto:ron@savage.net.au">ron@savage.net.au</A>&gt;</EM> in 2002.</P>
+<P>Home page: <A HREF="http://savage.net.au/index.html">http://savage.net.au/index.html</A></P>
+<P>
+<HR>
+<H1><A NAME="copyright">Copyright</A></H1>
+<P>Austrlian copyright (c) 2002, Ron Savage. All rights reserved.</P>
+<PRE>
+        All Programs of mine are 'OSI Certified Open Source Software';
+        you can redistribute them and/or modify them under the terms of
+        The Artistic License, a copy of which is available at:
+        <A HREF="http://www.opensource.org/licenses/index.html">http://www.opensource.org/licenses/index.html</A></PRE>
+
+</BODY>
+
+</HTML>

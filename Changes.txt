@@ -1,0 +1,4 @@
+Revision history for Perl extension DBIx::HTML::PopupRadio.
+
+1.00  Sat Sep 28 12:37:29 2002
+	- original version
