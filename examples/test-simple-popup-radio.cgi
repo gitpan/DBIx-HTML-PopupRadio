@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # Name:
-#	test-menus.cgi.
+#	test-simple-popup-radio.cgi.
 #
 # Purpose:
 #	Test DBIx::HTML::PopupRadio.

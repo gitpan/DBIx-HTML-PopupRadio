@@ -1,4 +1,12 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
+1.01  Tue Oct 15 11:41:13
+	- Change the meaning of the 'default' parameter so it refers
+		to the visible menu item and not the value associated with
+		the visible menu item. This now matches the meaning of the
+		'default' parameter used in DBIx::HTML::ClientDB
+	- Add a primitive test program t/test.t
+	- Minor documentation changes
+
 1.00  Sat Sep 28 12:37:29 2002
 	- original version

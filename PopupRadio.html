@@ -90,9 +90,10 @@ Ie By the time you call one of the latter 2 methods, dbh must be set.</P>
 <P></P>
 <DT><STRONG><A NAME="item_default_%3D%3E_%27%27">default =&gt; ''</A></STRONG><BR>
 <DD>
-Pass in the string which is to be the default item on the popup menu or radio
-group. You supply here the visible menu item, not the value associated with
+Pass in the string (from SQL column 2) which is to be the default item on the popup
+menu or radio group. You supply here the visible menu item, not the value associated with
 that menu item.
+<P>If default is not given a value, the first menu item becomes the default.</P>
 <P>See the discussion of the sql option for details about the menu items.</P>
 <P>This option is not mandatory.</P>
 <P></P>
@@ -159,12 +160,12 @@ campus_name.</P>
 <DL>
 <DT><STRONG><A NAME="item_new">new(%arg): The constructor</A></STRONG><BR>
 <DD>
-See the previous section for details.
+See the previous section for details of the parameters.
 <P></P>
 <DT><STRONG><A NAME="item_param">param($id): Returns visible menu item corresponding to menu value</A></STRONG><BR>
 <DD>
 Call this to convert the value returned to the CGI script when the user
-slected a menu item, into the visible menu item selected by the user.
+selected a menu item, into the visible menu item selected by the user.
 <P>In other words, convert the first column of the SQL into the second column.</P>
 <P></P>
 <DT><STRONG><A NAME="item_popup_menu">popup_menu(%arg): Return the HTML for a popup menu</A></STRONG><BR>
@@ -182,7 +183,7 @@ Call this to set options after calling new().
 <P></P>
 <DT><STRONG><A NAME="item_size">size(): Return the number of rows returned by your SQL</A></STRONG><BR>
 <DD>
-Call this after callling 'popup_menu' or 'radio_group'.
+Call this after calling 'popup_menu' or 'radio_group'.
 <P>It will tell you whether or not your menu is empty.</P>
 <P></P></DL>
 <P>
@@ -190,7 +191,7 @@ Call this after callling 'popup_menu' or 'radio_group'.
 <H1><A NAME="sample code">Sample Code</A></H1>
 <P>See examples/*.cgi for complete programs, both simple and complex.</P>
 <P>You will need to run examples/bootstrap-menus.pl to load the 'test'
-database, 'campus' table, with sample data.</P>
+database, 'campus' and 'unit' tables, with sample data.</P>
 <P>You'll have to patch these 2 programs vis-a-vis the db vendor, username
 and password.</P>
 <P>The sample data in bootstrap-menus.pl is simple, but is used by several
@@ -199,6 +200,7 @@ modules, so don't be too keen on changing it :-).</P>
 <HR>
 <H1><A NAME="see also">See Also</A></H1>
 <PRE>
+        DBIx::HTML::ClientDB
         DBIx::HTML::LinkedMenus
         DBIx::CSS::TreeMenu
         DBIx::CSS::TabMenu</PRE>

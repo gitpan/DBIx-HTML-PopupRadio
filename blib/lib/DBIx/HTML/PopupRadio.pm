@@ -49,7 +49,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 
 );
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 
 # -----------------------------------------------
 
@@ -340,9 +340,11 @@ Ie By the time you call one of the latter 2 methods, dbh must be set.
 
 =item default => ''
 
-Pass in the string which is to be the default item on the popup menu or radio
-group. You supply here the visible menu item, not the value associated with
+Pass in the string (from SQL column 2) which is to be the default item on the popup
+menu or radio group. You supply here the visible menu item, not the value associated with
 that menu item.
+
+If default is not given a value, the first menu item becomes the default.
 
 See the discussion of the sql option for details about the menu items.
 
@@ -429,12 +431,12 @@ param returns the empty string if the value of $id is unknown.
 
 =item new(%arg): The constructor
 
-See the previous section for details.
+See the previous section for details of the parameters.
 
 =item param($id): Returns visible menu item corresponding to menu value
 
 Call this to convert the value returned to the CGI script when the user
-slected a menu item, into the visible menu item selected by the user.
+selected a menu item, into the visible menu item selected by the user.
 
 In other words, convert the first column of the SQL into the second column.
 
@@ -454,7 +456,7 @@ set(%arg) takes the same parameters as new().
 
 =item size(): Return the number of rows returned by your SQL
 
-Call this after callling 'popup_menu' or 'radio_group'.
+Call this after calling 'popup_menu' or 'radio_group'.
 
 It will tell you whether or not your menu is empty.
 
@@ -465,7 +467,7 @@ It will tell you whether or not your menu is empty.
 See examples/*.cgi for complete programs, both simple and complex.
 
 You will need to run examples/bootstrap-menus.pl to load the 'test'
-database, 'campus' table, with sample data.
+database, 'campus' and 'unit' tables, with sample data.
 
 You'll have to patch these 2 programs vis-a-vis the db vendor, username
 and password.
@@ -475,6 +477,7 @@ modules, so don't be too keen on changing it :-).
 
 =head1 See Also
 
+	DBIx::HTML::ClientDB
 	DBIx::HTML::LinkedMenus
 	DBIx::CSS::TreeMenu
 	DBIx::CSS::TabMenu
