@@ -195,7 +195,7 @@ See Also
             DBIx::CSS::TreeMenu
             DBIx::CSS::TabMenu
 
-    These modules will be released after the current one.
+    The latter 2 modules will be released after the current one.
 
 Author
     "DBIx::HTML::PopupRadio" was written by Ron Savage *<ron@savage.net.au>*
@@ -204,7 +204,7 @@ Author
     Home page: http://savage.net.au/index.html
 
 Copyright
-    Austrlian copyright (c) 2002, Ron Savage. All rights reserved.
+    Australian copyright (c) 2002, Ron Savage. All rights reserved.
 
             All Programs of mine are 'OSI Certified Open Source Software';
             you can redistribute them and/or modify them under the terms of

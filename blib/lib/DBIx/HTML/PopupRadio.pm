@@ -49,7 +49,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 
 );
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 
 # -----------------------------------------------
 
@@ -482,7 +482,7 @@ modules, so don't be too keen on changing it :-).
 	DBIx::CSS::TreeMenu
 	DBIx::CSS::TabMenu
 
-These modules will be released after the current one.
+The latter 2 modules will be released after the current one.
 
 =head1 Author
 
@@ -492,7 +492,7 @@ Home page: http://savage.net.au/index.html
 
 =head1 Copyright
 
-Austrlian copyright (c) 2002, Ron Savage. All rights reserved.
+Australian copyright (c) 2002, Ron Savage. All rights reserved.
 
 	All Programs of mine are 'OSI Certified Open Source Software';
 	you can redistribute them and/or modify them under the terms of

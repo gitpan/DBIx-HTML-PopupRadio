@@ -1,7 +1,7 @@
 Makefile.PL
 test.pl
-PopupRadio.pm
 Changes.txt
+PopupRadio.pm
 pm_to_blib
 PopupRadio.html
 MANIFEST
@@ -12,7 +12,7 @@ blib/arch/auto/DBIx/HTML/PopupRadio/.exists
 blib/lib/auto/DBIx/HTML/PopupRadio/.exists
 blib/lib/DBIx/HTML/.exists
 blib/lib/DBIx/HTML/PopupRadio.pm
+t/test.t
 examples/bootstrap-menus.pl
 examples/test-complex-popup-radio.cgi
 examples/test-simple-popup-radio.cgi
-t/test.t
