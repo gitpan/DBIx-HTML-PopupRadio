@@ -1,5 +1,8 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
+1.04  Wed Dec 11 12:53:57 2002
+	- Minor documentation changes. No need to upgrade
+
 1.03  Mon Nov 18 12:53:57 2002
 	- Fix sub radio_group so that if there is no default,
 		the items are counted, and the first becomes the default.

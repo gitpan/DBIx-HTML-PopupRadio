@@ -8,7 +8,7 @@ WriteMakefile
 	($] ge '5.005') ?
 	(
 		'AUTHOR' => 'Ron Savage (ron@savage.net.au)',
-		'ABSTRACT' => 'Convert db data to HTML popup_menu or radio group',
+		'ABSTRACT' => 'Convert db data to HTML popup menu or radio group',
     ) : (),
 	clean				=>
 	{
