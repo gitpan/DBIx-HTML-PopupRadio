@@ -1,5 +1,12 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
+1.10  Mon Feb 14 20:08:00 2005
+	- Extend the flexibility of the 'prompt' option, to allow it to point to an anonymous
+		hash, so you can specify a set of strings, and their corresponding values, to be output
+		at the top of the menu. The default behaviour is identical to the previous version.
+		Original patch by Sean McKenna
+	- Update docs
+
 1.09  Mon Jul 19 14:43:00 2004
 	- Change Makefile.PL to coexist with Module::Build
 	- Delete ./test.pl

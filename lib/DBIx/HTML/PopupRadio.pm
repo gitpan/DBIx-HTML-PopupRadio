@@ -49,7 +49,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 
 );
-our $VERSION = '1.09';
+our $VERSION = '1.10';
 
 # -----------------------------------------------
 
@@ -197,12 +197,11 @@ sub popup_menu
 	{
 		if (ref($prompt) eq 'HASH')
 		{
-			my($key) = keys %$prompt;
-			push(@html, qq|<option value = "$key">$$prompt{$key}</option>|);
+			push @html, qq|<option value = "$_">$$prompt{$_}</option>| for sort keys %$prompt;
 		}
 		else
 		{
-			push(@html, qq|<option value = "$prompt">$prompt</option>|);
+			push @html, qq|<option value = "$prompt">$prompt</option>|;
 		}
 	}
 
@@ -212,12 +211,12 @@ sub popup_menu
 		$s .= qq| selected = "selected"| if ($$self{'_default'} eq $$self{'_data'}{$_}{'value'});
 		$s .= qq|>$$self{'_data'}{$_}{'value'}</option>|;
 
-		push(@html, $s);
+		push @html, $s;
 	}
 
-	push(@html, '</select>', '');
+	push @html, '</select>', '';
 
-	join("\n", @html);
+	join "\n", @html;
 
 }	# End of popup_menu.
 
@@ -237,7 +236,7 @@ sub radio_group
 
 	my(@html, $s);
 
-	push(@html, '');
+	push @html, '';
 
 	for (sort{$$self{'_data'}{$a}{'order'} <=> $$self{'_data'}{$b}{'order'} } keys %{$$self{'_data'} })
 	{
@@ -257,12 +256,12 @@ sub radio_group
 		$s .= qq| />$$self{'_data'}{$_}{'value'}|;
 		$s .= '<br />' if ($$self{'_linebreak'});
 
-		push(@html, $s);
+		push @html, $s;
 	}
 
-	push(@html, '');
+	push @html, '';
 
-	join("\n", @html);
+	join "\n", @html;
 
 }	# End of radio_group.
 
@@ -468,6 +467,12 @@ passed back to the CGI script if the user selects that item.
 In the second case, the string 'Choose one' is the visible menu item, and the other value,
 here '0', is the one passed back to the CGI script. In particular, this works -
 new(prompt => {'' => 'Choose one'}) - to return the empty string to the CGI script.
+
+Alternately, an anonymous hash or hash reference can be used, so multiple pairs
+may be passed and they will appear at the top of the list sorted in the order of the
+values.  Example new(prompt => {'no change' => 'no change', 'remove' => 'remove'});
+
+This latter mechanism allows you to put multiple selections at the top of the menu.
 
 This option is not mandatory.
 
