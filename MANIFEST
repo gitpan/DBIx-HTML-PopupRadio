@@ -3,9 +3,9 @@ PopupRadio.pm
 test.pl
 Makefile.PL
 PopupRadio.html
-README
 MANIFEST
+README
+t/test.t
 examples/bootstrap-menus.pl
 examples/test-complex-popup-radio.cgi
 examples/test-simple-popup-radio.cgi
-t/test.t

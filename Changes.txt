@@ -1,5 +1,9 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
+1.07  Mon Apr 28 21:31:00 2003
+	- Backticks with redirection of STDERR failed in Module::MakeDist V 1.04 when making
+		V 1.06 of this module, so I've had to re-make then both
+
 1.06  Mon Apr 28 09:09:00 2003
 	- The constructor now takes a 'javascript' parameter, whose value is, say, an event handler
 	- A sample would be: 'onChange = "replicate()"'. See the POD for details
