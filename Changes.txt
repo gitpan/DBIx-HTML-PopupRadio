@@ -1,5 +1,12 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
+1.05  Sun Mar 23 11:29:00 2003
+	- No source code changes in this version
+	- Patch to stop shipping blib/ directory in Unix distros, because the
+		PAUSE indexer takes this directory to indicate a binary distro,
+		which means it does not index the module, and this in turn means
+		the module is not listed in the CPAN daily update list, etc.
+
 1.04  Wed Dec 11 12:53:57 2002
 	- Minor documentation changes. No need to upgrade
 
