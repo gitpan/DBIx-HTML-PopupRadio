@@ -1,5 +1,10 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
+1.09  Mon Jul 19 14:43:00 2004
+	- Change Makefile.PL to coexist with Module::Build
+	- Delete ./test.pl
+	- Add t/pod.t to test all PODs
+
 1.08  Mon Jun  3 19:48:00 2003
 	- Change the option 'prompt', which can be used to set the first selection in pop-up menus,
 		so that it is either a string (as it was originally), or a hash ref (new in this version).

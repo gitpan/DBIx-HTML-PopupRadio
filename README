@@ -1,275 +1,56 @@
-NAME
-    "DBIx::HTML::PopupRadio" - Convert sql into a popup menu or radio group.
+README file for DBIx::HTML::PopupRadio.
 
-Synopsis
-            use DBIx::HTML::PopupRadio;
+Warning: WinZip 8.1 and 9.0 both contain an 'accidental' bug which stops
+them recognizing POSIX-style directory structures in valid tar files.
+You are better off using a reliable tool such as InfoZip:
+ftp://ftp.info-zip.org/pub/infozip/
 
-            my($popup_object) = DBIx::HTML::PopupRadio -> new
-            (
-                    dbh => $dbh,
-                    sql => 'select campus_id, campus_name from campus order by campus_name',
-            );
+1 Installing from a Unix-like distro
+------------------------------------
+shell>gunzip DBIx-HTML-PopupRadio-1.09.tgz
+shell>tar mxvf DBIx-HTML-PopupRadio-1.09.tar
 
-            $popup_object -> set(default => '1');
+On Unix-like systems, assuming you have installed Module::Build V 0.25+:
 
-            my($popup_menu)  = $popup_object -> popup_menu();
-            my($radio_group) = $popup_object -> radio_group();
+shell>perl Build.PL
+shell>./Build
+shell>./Build test
+shell>./Build install
 
-            print $popup_menu;
+On MS Windows-like systems, assuming you have installed Module::Build V 0.25+:
 
-Description
-    This module takes a db handle and an SQL statement, and builds a hash.
+shell>perl Build.PL
+shell>perl Build
+shell>perl Build test
+shell>perl Build install
 
-    Then you ask for that hash in HTML, as a popup menu or as a radio group.
+Alternately, without Module::Build, you do this:
 
-    The reading of the db table is delayed until you actually call one of
-    the methods 'popup_menu' or 'radio_group'. Even then, it is delayed
-    until any parameters passed in to these 2 methods are processed.
+Note: 'make' on MS Windows-like systems may be called 'nmake' or 'dmake'.
 
-    After a call to one of these 2 methods, you can call the 'size' method
-    if you need to check how many rows were returned by the SQL you used.
+shell>perl Makefile.PL
+shell>make
+shell>make test
+shell>su              (for Unix-like systems)
+shell>make install
+shell>exit            (for Unix-like systems)
 
-    Neither the module CGI.pm, nor any of that kidney, are used by this
-    module. We simply output pure HTML.
+On all systems:
 
-Distributions
-    This module is available both as a Unix-style distro (*.tgz) and an
-    ActiveState-style distro (*.ppd). The latter is shipped in a *.zip file.
+Run PopupRadio.pm through you favourite pod2html translator.
 
-    See http://savage.net.au/Perl-modules/html/installing-a-module.html for
-    help on unpacking and installing each type of distro.
+If you are using my fancy-pom2.pl, with its 'default.css' file installed in
+/apache2/htdocs/css/, you'd do:
 
-Usage
-    You create an object of the class by calling the constructor, 'new'.
+shell>perl fancy-pom2.pl html -css PopupRadio.pm > /apache2/htdocs/PopupRadio.html
 
-    You then call 'set', if you wish, to set any options.
+or perhaps something like:
 
-    Now call 'popup_menu' or 'radio_group' to get the HTML.
+shell>perl fancy-pom2.pl html -css PopupRadio.pm > /perl/html/site/lib/DBIx/HTML/PopupRadio.html
 
-    Lastly, display the HTML as part of a form.
-
-    The method names 'popup_menu' and 'radio_group' (and 'param') were
-    chosen to be reminiscent of methods with the same names in the CGI.pm
-    module. But let me repeat, my module does not use CGI.
-
-Options
-    Here, in alphabetical order, are the options accepted by the
-    constructor, together with their default values.
-
-    dbh => ''
-        Pass in an open database handle.
-
-        This option is mandatory, in the call to new, set, popup_menu or
-        radio_group. Ie By the time you call one of the latter 2 methods,
-        dbh must be set.
-
-    default => ''
-        Pass in the string (from SQL column 2) which is to be the default
-        item on the popup menu or radio group. You supply here the visible
-        menu item, not the value associated with that menu item.
-
-        If default is not given a value, the first menu item becomes the
-        default.
-
-        See the discussion of the sql option for details about the menu
-        items.
-
-        This option is not mandatory.
-
-    javascript => ''
-        Pass in a string of JavaScript, eg an event handler.
-
-        By using, say, javascript => 'onChange = "replicate()"', you can
-        change the first line of HTML output from this:
-
-                <select id = "field01" name = "field01">
-
-        to this:
-
-                <select id = "field01" name = "field01" onChange = "replicate()">
-
-        Here is a real sample of such a JavaScript function, which would be
-        output elsewhere in the HTML:
-
-                <script language="JavaScript">
-                function replicate()
-                {
-                        a_form.field02.value =
-                                a_form.field01.options[a_form.field01.selectedIndex].text;
-
-                        a_form.field03.value =
-                                a_form.field01.options[a_form.field01.selectedIndex].value;
-                }
-                </script>
-
-        You can see what's happening: The menu item, both visible text and
-        corresponding value returned to your CGI script, are being copied
-        from the popup menu to 2 other fields in the form.
-
-        Obviously you would replace the body of this function with code of
-        your own choosing.
-
-        Q: Since this is an onChange handler, the 2 other fields will not be
-        initialized until the default menu selection is changed. So, how do
-        you initialize them before the user selects a new menu item?
-
-        A: By outputting the following Javascript further down the form,
-        after the function, menu and other 2 fields have been defined:
-
-                <script language="JavaScript">replicate();</script>
-
-        What's important to note here is that no function is declared, but
-        one is called. The JavaScript is simple executed inline, at the time
-        it is parsed by the browser.
-
-        This option is not mandatory.
-
-    linebreak => 0
-        Pass in 1 if you want each radio group item on a separate line, ie
-        separated by <br />s.
-
-        This option is not mandatory.
-
-    name => 'dbix_menu'
-        Pass in the name of the form item to use for the popup menu or radio
-        group.
-
-        This option is not mandatory, since it has a default value. It could
-        be unset and then reset, but must have a value by the time you call
-        popup_menu or radio_group.
-
-        The value of this parameter is what you will pass into a CGI object
-        when you call its param() method to retrieve the user's selection.
-
-        Hence you would do something like:
-
-                my($name)         = 'fancy_menu';
-                my($popup_object) = DBIx::HTML::PopupRadio -> new(name => $name, ...);
-                my($q)            = CGI -> new();
-                my($id)           = $q -> param($name) || '';
-
-    prompt => ''
-        Alternately, this is possible: prompt => {'x' => 'y'}.
-
-        Pass in a prompt to use as the first entry in the popup menu.
-
-        The string, in the first case, can contain a single quote but not a
-        double quote. Eg: prompt => "O'Connor".
-
-        The key, in the second case, can contain a single quote but not a
-        double quote. Eg: prompt => {"'aitch" => 'Haitch = "h"'}.
-
-        Hence we can say new(prompt => 'Choose one') or new(prompt => {'0'
-        => 'Choose one'}).
-
-        In the first case, the string 'Choose one' is both a visible menu
-        item and the value passed back to the CGI script if the user selects
-        that item.
-
-        In the second case, the string 'Choose one' is the visible menu
-        item, and the other value, here '0', is the one passed back to the
-        CGI script. In particular, this works - new(prompt => {'' => 'Choose
-        one'}) - to return the empty string to the CGI script.
-
-        This option is not mandatory.
-
-    sql => ''
-        Pass in the SQL used to select the popup menu or radio group items.
-
-        This option is mandatory, in the call to new, set, popup_menu or
-        radio_group. Ie By the time you call one of the latter 2 methods,
-        sql must be set.
-
-        The SQL must select 2 columns. The first will be used as the value
-        returned by a CGI object, for example, when you call its param()
-        method. The second value will be used as the visible selection
-        offered to the user on the menu.
-
-        Of course, the 2 columns selected could be the same:
-
-                $obj -> set(sql => 'select campus_name, campus_name from campus');
-
-        But normally you would do this:
-
-                $obj -> set(sql => 'select campus_id, campus_name from campus');
-
-        This means that the second column is used to construct visible menu
-        items, and when an item is selected by the user, the first column is
-        what is returned to your CGI script.
-
-        The question remains: After you do something like this:
-
-                my($q)     = CGI -> new();
-                my($id)    = $q -> param('dbxi_menu') || '';
-
-        how do you convert the value, eg campus_id, back into the visible
-        menu item, eg campus_name.
-
-        Simple: You call the param method of the DBIx::HTML::PopupRadio
-        class:
-
-                my($name) = $popup_object -> param($id);
-
-        param returns the empty string if the value of $id is unknown.
-
-Methods
-    new(%arg): The constructor
-        See the previous section for details of the parameters.
-
-    param($id): Returns visible menu item corresponding to menu value
-        Call this to convert the value returned to the CGI script when the
-        user selected a menu item, into the visible menu item selected by
-        the user.
-
-        In other words, convert the first column of the SQL into the second
-        column.
-
-    popup_menu(%arg): Return the HTML for a popup menu
-        popup_menu(%arg) takes the same parameters as new().
-
-    radio_group(%arg): Return the HTML for a radio group
-        radio_group(%arg) takes the same parameters as new().
-
-    set(%arg): Set class member options
-        Call this to set options after calling new().
-
-        set(%arg) takes the same parameters as new().
-
-    size(): Return the number of rows returned by your SQL
-        Call this after calling 'popup_menu' or 'radio_group'.
-
-        It will tell you whether or not your menu is empty.
-
-Sample Code
-    See examples/*.cgi for complete programs, both simple and complex.
-
-    You will need to run examples/bootstrap-menus.pl to load the 'test'
-    database, 'campus' and 'unit' tables, with sample data.
-
-    You'll have to patch these 2 programs vis-a-vis the db vendor, username
-    and password.
-
-    The sample data in bootstrap-menus.pl is simple, but is used by several
-    modules, so don't be too keen on changing it :-).
-
-See Also
-            CGI::Explorer
-            DBIx::HTML::ClientDB
-            DBIx::HTML::LinkedMenus
-
-    The latter 2 modules will be released after the current one.
-
-Author
-    "DBIx::HTML::PopupRadio" was written by Ron Savage *<ron@savage.net.au>*
-    in 2002.
-
-    Home page: http://savage.net.au/index.html
-
-Copyright
-    Australian copyright (c) 2002, Ron Savage. All rights reserved.
-
-            All Programs of mine are 'OSI Certified Open Source Software';
-            you can redistribute them and/or modify them under the terms of
-            The Artistic License, a copy of which is available at:
-            http://www.opensource.org/licenses/index.html
-
+2 Installing from an ActiveState distro
+---------------------------------------
+shell>unzip DBIx-HTML-PopupRadio-1.09.zip
+shell>ppm install --location=. DBIx-HTML-PopupRadio
+shell>del DBIx-HTML-PopupRadio-1.09.ppd
+shell>del PPM-DBIx-HTML-PopupRadio-1.09.tar.gz
