@@ -49,7 +49,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 
 );
-our $VERSION = '1.02';
+our $VERSION = '1.03';
 
 # -----------------------------------------------
 
@@ -216,6 +216,8 @@ sub radio_group
 	$self -> _validate_options();
 	$self -> _read_data() if (! $$self{'_data'});
 
+	my($count) = 0;
+
 	my(@html, $s);
 
 	push(@html, '');
@@ -223,7 +225,18 @@ sub radio_group
 	for (sort{$$self{'_data'}{$a}{'order'} <=> $$self{'_data'}{$b}{'order'} } keys %{$$self{'_data'} })
 	{
 		$s = qq|<input type = "radio" id = "$$self{'_name'}" name = "$$self{'_name'}" value = "$_"|;
-		$s .= qq| checked = "checked"| if ($$self{'_default'} eq $$self{'_data'}{$_}{'value'});
+
+		if ($$self{'_default'})
+		{
+			$s .= qq| checked = "checked"| if ($$self{'_default'} eq $$self{'_data'}{$_}{'value'});
+		}
+		else
+		{
+			$count++;
+
+			$s .= qq| checked = "checked"| if ($count == 1);
+		}
+
 		$s .= qq| />$$self{'_data'}{$_}{'value'}|;
 		$s .= '<br />' if ($$self{'_linebreak'});
 

@@ -1,9 +1,15 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
-1.02  Sat Oct 26 14:29:00
+1.03  Mon Nov 18 12:53:57 2002
+	- Fix sub radio_group so that if there is no default,
+		the items are counted, and the first becomes the default.
+		This was the plan all along, but it was so clear in my
+		mind I did not transfer the logic to the code
+
+1.02  Sat Oct 26 14:29:00 2002
 	- Minor documentation changes. No need to upgrade
 
-1.01  Tue Oct 15 11:41:13
+1.01  Tue Oct 15 11:41:13 2002
 	- Change the meaning of the 'default' parameter so it refers
 		to the visible menu item and not the value associated with
 		the visible menu item. This now matches the meaning of the
