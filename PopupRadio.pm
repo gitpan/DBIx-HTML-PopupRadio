@@ -49,7 +49,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 
 );
-our $VERSION = '1.07';
+our $VERSION = '1.08';
 
 # -----------------------------------------------
 
@@ -183,8 +183,6 @@ sub popup_menu
 	$self -> _validate_options();
 	$self -> _read_data() if (! $$self{'_data'});
 
-	my($prompt) = $$self{'_prompt'};
-
 	my(@html, $s);
 
 	$s = qq|<select id = "$$self{'_name'}" name = "$$self{'_name'}" |;
@@ -192,7 +190,21 @@ sub popup_menu
 	$s .= '>';
 
 	push(@html, '', $s);
-	push(@html, qq|<option value = "$prompt">$prompt</option>|) if ($prompt);
+
+	my($prompt) = $$self{'_prompt'};
+
+	if ($prompt)
+	{
+		if (ref($prompt) eq 'HASH')
+		{
+			my($key) = keys %$prompt;
+			push(@html, qq|<option value = "$key">$$prompt{$key}</option>|);
+		}
+		else
+		{
+			push(@html, qq|<option value = "$prompt">$prompt</option>|);
+		}
+	}
 
 	for (sort{$$self{'_data'}{$a}{'order'} <=> $$self{'_data'}{$b}{'order'} } keys %{$$self{'_data'} })
 	{
@@ -438,12 +450,24 @@ Hence you would do something like:
 
 =item prompt => ''
 
+Alternately, this is possible: prompt => {'x' => 'y'}.
+
 Pass in a prompt to use as the first entry in the popup menu.
 
-The string can contain a single quote but not a double quote.
+The string, in the first case, can contain a single quote but not a double quote. Eg:
+prompt => "O'Connor".
 
-This string will be both a visible menu item and the value returned to yoru
-CGI script if the user selects this menu item.
+The key, in the second case, can contain a single quote but not a double quote. Eg:
+prompt => {"'aitch" => 'Haitch = "h"'}.
+
+Hence we can say new(prompt => 'Choose one') or new(prompt => {'0' => 'Choose one'}).
+
+In the first case, the string 'Choose one' is both a visible menu item and the value
+passed back to the CGI script if the user selects that item.
+
+In the second case, the string 'Choose one' is the visible menu item, and the other value,
+here '0', is the one passed back to the CGI script. In particular, this works -
+new(prompt => {'' => 'Choose one'}) - to return the empty string to the CGI script.
 
 This option is not mandatory.
 

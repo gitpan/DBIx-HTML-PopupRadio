@@ -218,14 +218,30 @@ call its <a href="#item_param"><code>param()</code></a> method to retrieve the u
 <dt><strong><a name="item_prompt_%3d%3e_%27%27">prompt =&gt; ''</a></strong><br />
 </dt>
 <dd>
-Pass in a prompt to use as the first entry in the popup menu.
+Alternately, this is possible: prompt =&gt; {'x' =&gt; 'y'}.
 </dd>
 <dd>
-<p>The string can contain a single quote but not a double quote.</p>
+<p>Pass in a prompt to use as the first entry in the popup menu.</p>
 </dd>
 <dd>
-<p>This string will be both a visible menu item and the value returned to yoru
-CGI script if the user selects this menu item.</p>
+<p>The string, in the first case, can contain a single quote but not a double quote. Eg:
+prompt =&gt; ``O'Connor''.</p>
+</dd>
+<dd>
+<p>The key, in the second case, can contain a single quote but not a double quote. Eg:
+prompt =&gt; {``'aitch'' =&gt; 'Haitch = ``h'''}.</p>
+</dd>
+<dd>
+<p>Hence we can say new(prompt =&gt; 'Choose one') or new(prompt =&gt; {'0' =&gt; 'Choose one'}).</p>
+</dd>
+<dd>
+<p>In the first case, the string 'Choose one' is both a visible menu item and the value
+passed back to the CGI script if the user selects that item.</p>
+</dd>
+<dd>
+<p>In the second case, the string 'Choose one' is the visible menu item, and the other value,
+here '0', is the one passed back to the CGI script. In particular, this works -
+new(prompt =&gt; {'' =&gt; 'Choose one'}) - to return the empty string to the CGI script.</p>
 </dd>
 <dd>
 <p>This option is not mandatory.</p>

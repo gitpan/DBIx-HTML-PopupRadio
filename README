@@ -149,12 +149,27 @@ Options
                 my($id)           = $q -> param($name) || '';
 
     prompt => ''
+        Alternately, this is possible: prompt => {'x' => 'y'}.
+
         Pass in a prompt to use as the first entry in the popup menu.
 
-        The string can contain a single quote but not a double quote.
+        The string, in the first case, can contain a single quote but not a
+        double quote. Eg: prompt => "O'Connor".
 
-        This string will be both a visible menu item and the value returned
-        to yoru CGI script if the user selects this menu item.
+        The key, in the second case, can contain a single quote but not a
+        double quote. Eg: prompt => {"'aitch" => 'Haitch = "h"'}.
+
+        Hence we can say new(prompt => 'Choose one') or new(prompt => {'0'
+        => 'Choose one'}).
+
+        In the first case, the string 'Choose one' is both a visible menu
+        item and the value passed back to the CGI script if the user selects
+        that item.
+
+        In the second case, the string 'Choose one' is the visible menu
+        item, and the other value, here '0', is the one passed back to the
+        CGI script. In particular, this works - new(prompt => {'' => 'Choose
+        one'}) - to return the empty string to the CGI script.
 
         This option is not mandatory.
 
