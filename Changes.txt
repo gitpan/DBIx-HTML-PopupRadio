@@ -1,5 +1,9 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
+1.06  Mon Apr 28 09:09:00 2003
+	- The constructor now takes a 'javascript' parameter, whose value is, say, an event handler
+	- A sample would be: 'onChange = "replicate()"'. See the POD for details
+
 1.05  Sun Mar 23 11:29:00 2003
 	- No source code changes in this version
 	- Patch to stop shipping blib/ directory in Unix distros, because the

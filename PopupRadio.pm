@@ -49,7 +49,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 
 );
-our $VERSION = '1.05';
+our $VERSION = '1.06';
 
 # -----------------------------------------------
 
@@ -64,6 +64,7 @@ our $VERSION = '1.05';
 	(	# Alphabetical order.
 		_dbh		=> '',
 		_default	=> '',			# For popup_menu or radio_group.
+		_javascript	=> '',
 		_linebreak	=> 0,			# For radio_group.
 		_name		=> 'dbix_menu',
 		_prompt		=> '',			# For popup_menu.
@@ -186,7 +187,11 @@ sub popup_menu
 
 	my(@html, $s);
 
-	push(@html, '', qq|<select id = "$$self{'_name'}" name = "$$self{'_name'}">|);
+	$s = qq|<select id = "$$self{'_name'}" name = "$$self{'_name'}" |;
+	$s .= $$self{'_javascript'} if ($$self{'_javascript'});
+	$s .= '>';
+
+	push(@html, '', $s);
 	push(@html, qq|<option value = "$prompt">$prompt</option>|) if ($prompt);
 
 	for (sort{$$self{'_data'}{$a}{'order'} <=> $$self{'_data'}{$b}{'order'} } keys %{$$self{'_data'} })
@@ -363,6 +368,49 @@ See the discussion of the sql option for details about the menu items.
 
 This option is not mandatory.
 
+=item javascript => ''
+
+Pass in a string of JavaScript, eg an event handler.
+
+By using, say, javascript => 'onChange = "replicate()"', you can change the first line of HTML output from this:
+
+	<select id = "field01" name = "field01">
+
+to this:
+
+	<select id = "field01" name = "field01" onChange = "replicate()">
+
+Here is a real sample of such a JavaScript function, which would be output elsewhere in the HTML:
+
+	<script language="JavaScript">
+	function replicate()
+	{
+		a_form.field02.value =
+			a_form.field01.options[a_form.field01.selectedIndex].text;
+
+		a_form.field03.value =
+			a_form.field01.options[a_form.field01.selectedIndex].value;
+	}
+	</script>
+
+You can see what's happening: The menu item, both visible text and corresponding value returned to your CGI script,
+are being copied from the popup menu to 2 other fields in the form.
+
+Obviously you would replace the body of this function with code of your own choosing.
+
+Q: Since this is an onChange handler, the 2 other fields will not be initialized until
+the default menu selection is changed. So, how do you initialize them before the user selects a new menu item?
+
+A: By outputting the following Javascript further down the form, after the function, menu and other 2 fields have
+been defined:
+
+	<script language="JavaScript">replicate();</script>
+
+What's important to note here is that no function is declared, but one is called. The JavaScript is simple executed
+inline, at the time it is parsed by the browser.
+
+This option is not mandatory.
+
 =item linebreak => 0
 
 Pass in 1 if you want each radio group item on a separate line, ie separated
@@ -412,11 +460,11 @@ will be used as the visible selection offered to the user on the menu.
 
 Of course, the 2 columns selected could be the same:
 
-	$obj -> set(sql => 'select campus_name, campus_name from campus order by campus_name');
+	$obj -> set(sql => 'select campus_name, campus_name from campus');
 
 But normally you would do this:
 
-	$obj -> set(sql => 'select campus_id, campus_name from campus order by campus_name');
+	$obj -> set(sql => 'select campus_id, campus_name from campus');
 
 This means that the second column is used to construct visible menu items, and
 when an item is selected by the user, the first column is what is returned to your

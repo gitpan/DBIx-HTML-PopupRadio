@@ -116,6 +116,70 @@ that menu item.
 <p>This option is not mandatory.</p>
 </dd>
 <p></p>
+<dt><strong><a name="item_javascript_%3d%3e_%27%27">javascript =&gt; ''</a></strong><br />
+</dt>
+<dd>
+Pass in a string of JavaScript, eg an event handler.
+</dd>
+<dd>
+<p>By using, say, javascript =&gt; 'onChange = ``replicate()''', you can change the first line of HTML output from this:</p>
+</dd>
+<dd>
+<pre>
+        &lt;select id = &quot;field01&quot; name = &quot;field01&quot;&gt;</pre>
+</dd>
+<dd>
+<p>to this:</p>
+</dd>
+<dd>
+<pre>
+        &lt;select id = &quot;field01&quot; name = &quot;field01&quot; onChange = &quot;replicate()&quot;&gt;</pre>
+</dd>
+<dd>
+<p>Here is a real sample of such a JavaScript function, which would be output elsewhere in the HTML:</p>
+</dd>
+<dd>
+<pre>
+        &lt;script language=&quot;JavaScript&quot;&gt;
+        function replicate()
+        {
+                a_form.field02.value =
+                        a_form.field01.options[a_form.field01.selectedIndex].text;</pre>
+</dd>
+<dd>
+<pre>
+                a_form.field03.value =
+                        a_form.field01.options[a_form.field01.selectedIndex].value;
+        }
+        &lt;/script&gt;</pre>
+</dd>
+<dd>
+<p>You can see what's happening: The menu item, both visible text and corresponding value returned to your CGI script,
+are being copied from the popup menu to 2 other fields in the form.</p>
+</dd>
+<dd>
+<p>Obviously you would replace the body of this function with code of your own choosing.</p>
+</dd>
+<dd>
+<p>Q: Since this is an onChange handler, the 2 other fields will not be initialized until
+the default menu selection is changed. So, how do you initialize them before the user selects a new menu item?</p>
+</dd>
+<dd>
+<p>A: By outputting the following Javascript further down the form, after the function, menu and other 2 fields have
+been defined:</p>
+</dd>
+<dd>
+<pre>
+        &lt;script language=&quot;JavaScript&quot;&gt;replicate();&lt;/script&gt;</pre>
+</dd>
+<dd>
+<p>What's important to note here is that no function is declared, but one is called. The JavaScript is simple executed
+inline, at the time it is parsed by the browser.</p>
+</dd>
+<dd>
+<p>This option is not mandatory.</p>
+</dd>
+<p></p>
 <dt><strong><a name="item_linebreak_%3d%3e_0">linebreak =&gt; 0</a></strong><br />
 </dt>
 <dd>
@@ -186,14 +250,14 @@ will be used as the visible selection offered to the user on the menu.</p>
 </dd>
 <dd>
 <pre>
-        $obj -&gt; set(sql =&gt; 'select campus_name, campus_name from campus order by campus_name');</pre>
+        $obj -&gt; set(sql =&gt; 'select campus_name, campus_name from campus');</pre>
 </dd>
 <dd>
 <p>But normally you would do this:</p>
 </dd>
 <dd>
 <pre>
-        $obj -&gt; set(sql =&gt; 'select campus_id, campus_name from campus order by campus_name');</pre>
+        $obj -&gt; set(sql =&gt; 'select campus_id, campus_name from campus');</pre>
 </dd>
 <dd>
 <p>This means that the second column is used to construct visible menu items, and
