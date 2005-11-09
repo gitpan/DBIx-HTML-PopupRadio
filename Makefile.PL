@@ -24,9 +24,10 @@ WriteMakefile
 	PL_FILES		=> {},
 	PREREQ_PM		=>
 	{
-		Carp		=> 0,
-		Test::More	=> 0,
-		Test::Pod	=> 0,
+		Carp						=> 0,
+		HTML::Entities::Interpolate	=> 1.00,
+		Test::More					=> 0,
+		Test::Pod					=> 0,
 	},
 	VERSION_FROM	=> 'lib/DBIx/HTML/PopupRadio.pm',
 );

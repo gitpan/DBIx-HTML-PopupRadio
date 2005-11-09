@@ -12,6 +12,7 @@ Module::Build -> new
 	},
 	requires		=>
 	{
-		Carp		=> 0,
+		Carp						=> 0,
+		HTML::Entities::Interpolate	=> 1.00,
 	},
 ) -> create_build_script();

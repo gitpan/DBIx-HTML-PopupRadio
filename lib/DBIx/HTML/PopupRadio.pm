@@ -30,6 +30,7 @@ require 5.005_62;
 require Exporter;
 
 use Carp;
+use HTML::Entities::Interpolate;
 
 our @ISA = qw(Exporter);
 
@@ -49,7 +50,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 
 );
-our $VERSION = '1.10';
+our $VERSION = '1.11';
 
 # -----------------------------------------------
 
@@ -67,6 +68,7 @@ our $VERSION = '1.10';
 		_javascript	=> '',
 		_linebreak	=> 0,			# For radio_group.
 		_name		=> 'dbix_menu',
+		_options	=> {},
 		_prompt		=> '',			# For popup_menu.
 		_sql		=> '',
 	);
@@ -129,14 +131,8 @@ our $VERSION = '1.10';
 
 sub new
 {
-	my($caller, %arg)	= @_;
-	my($caller_is_obj)	= ref($caller);
-	my($class)			= $caller_is_obj || $caller;
+	my($class, %arg)	= @_;
 	my($self)			= bless({}, $class);
-
-	# Warning: This code cannot call set(), because
-	# here keys absent from %arg are set to
-	# their default. In set(), they are ignored.
 
 	for my $attr_name ($self -> _standard_keys() )
 	{
@@ -185,7 +181,8 @@ sub popup_menu
 
 	my(@html, $s);
 
-	$s = qq|<select id = "$$self{'_name'}" name = "$$self{'_name'}" |;
+	$s = qq|<select id="$$self{'_name'}" name="$$self{'_name'}" |;
+	$s .= qq|$_="$Entitize{$$self{'_options'}{$_} }" | for sort keys %{$$self{'_options'} };
 	$s .= $$self{'_javascript'} if ($$self{'_javascript'});
 	$s .= '>';
 
@@ -197,19 +194,19 @@ sub popup_menu
 	{
 		if (ref($prompt) eq 'HASH')
 		{
-			push @html, qq|<option value = "$_">$$prompt{$_}</option>| for sort keys %$prompt;
+			push @html, qq|<option value="$Entitize{$_}">$Entitize{$$prompt{$_} }</option>| for sort keys %$prompt;
 		}
 		else
 		{
-			push @html, qq|<option value = "$prompt">$prompt</option>|;
+			push @html, qq|<option value="$Entitize{$prompt}">$Entitize{$prompt}</option>|;
 		}
 	}
 
 	for (sort{$$self{'_data'}{$a}{'order'} <=> $$self{'_data'}{$b}{'order'} } keys %{$$self{'_data'} })
 	{
-		$s = qq|<option value = "$_"|;
-		$s .= qq| selected = "selected"| if ($$self{'_default'} eq $$self{'_data'}{$_}{'value'});
-		$s .= qq|>$$self{'_data'}{$_}{'value'}</option>|;
+		$s = qq|<option value="$Entitize{$_}"|;
+		$s .= qq| selected="selected"| if ($$self{'_default'} eq $$self{'_data'}{$_}{'value'});
+		$s .= qq|>$Entitize{$$self{'_data'}{$_}{'value'} }</option>|;
 
 		push @html, $s;
 	}
@@ -240,20 +237,20 @@ sub radio_group
 
 	for (sort{$$self{'_data'}{$a}{'order'} <=> $$self{'_data'}{$b}{'order'} } keys %{$$self{'_data'} })
 	{
-		$s = qq|<input type = "radio" id = "$$self{'_name'}" name = "$$self{'_name'}" value = "$_"|;
+		$s = qq|<input type="radio" id="$$self{'_name'}" name="$$self{'_name'}" value="$Entitize{$_}"|;
 
 		if ($$self{'_default'})
 		{
-			$s .= qq| checked = "checked"| if ($$self{'_default'} eq $$self{'_data'}{$_}{'value'});
+			$s .= qq| checked="checked"| if ($$self{'_default'} eq $$self{'_data'}{$_}{'value'});
 		}
 		else
 		{
 			$count++;
 
-			$s .= qq| checked = "checked"| if ($count == 1);
+			$s .= qq| checked="checked"| if ($count == 1);
 		}
 
-		$s .= qq| />$$self{'_data'}{$_}{'value'}|;
+		$s .= qq| />$Entitize{$$self{'_data'}{$_}{'value'} }|;
 		$s .= '<br />' if ($$self{'_linebreak'});
 
 		push @html, $s;
@@ -447,6 +444,22 @@ Hence you would do something like:
 	my($q)            = CGI -> new();
 	my($id)           = $q -> param($name) || '';
 
+=item options => {}
+
+This is a hash ref of options you wish to set on the HTML 'select' itself.
+
+Eg: new(name => 'a_name', options => {tabindex => 2, force => 1}, ...).
+
+With new(name => 'a_name', ...), the select would look like:
+
+	<select id = "a_name" name = "a_name">
+
+With new(name => 'a_name', options => {tabindex => 2, force => 1}, ...), the select would look like:
+
+	<select id = "a_name" name = "a_name" tabindex = "2" force = "1">
+
+This option is not mandatory.
+
 =item prompt => ''
 
 Alternately, this is possible: prompt => {'x' => 'y'}.
@@ -538,9 +551,9 @@ popup_menu(%arg) takes the same parameters as new().
 
 radio_group(%arg) takes the same parameters as new().
 
-=item set(%arg): Set class member options
+=item set(%arg): Set options thus: some_option => $arg{'some_option'}
 
-Call this to set options after calling new().
+Call this to set any option after calling new().
 
 set(%arg) takes the same parameters as new().
 

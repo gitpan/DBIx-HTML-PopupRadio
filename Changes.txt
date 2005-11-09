@@ -1,5 +1,17 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
+1.11  Wed Nov  9 15:38:00 2005
+	- Add a new parameter to new() and set(): options.
+		This takes a hash ref as its value, and allows you to specify any list of options
+		you wish to add to the HTML of the 'select'. Eg:
+			With new(name => 'a_name', ...), the 'select' would look like:
+			<select id = "a_name" name = "a_name">
+			With new(name => 'a_name', options => {tabindex => 2, force => 1}, ...),
+			the 'select' would look like:
+			<select id = "a_name" name = "a_name" tabindex = "2" force = "1">
+	- Make this module depend on HTML::Entities::Interpolate so we can output any text
+		by calling HTML::Entities::encode_entities when appropriate
+
 1.10  Mon Feb 14 20:08:00 2005
 	- Extend the flexibility of the 'prompt' option, to allow it to point to an anonymous
 		hash, so you can specify a set of strings, and their corresponding values, to be output
