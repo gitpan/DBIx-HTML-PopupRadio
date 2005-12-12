@@ -50,7 +50,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 
 );
-our $VERSION = '1.11';
+our $VERSION = '1.12';
 
 # -----------------------------------------------
 
@@ -205,7 +205,7 @@ sub popup_menu
 	for (sort{$$self{'_data'}{$a}{'order'} <=> $$self{'_data'}{$b}{'order'} } keys %{$$self{'_data'} })
 	{
 		$s = qq|<option value="$Entitize{$_}"|;
-		$s .= qq| selected="selected"| if ($$self{'_default'} eq $$self{'_data'}{$_}{'value'});
+		$s .= qq| selected="selected"| if (defined($$self{'_default'}) && ($$self{'_default'} eq $$self{'_data'}{$_}{'value'}) );
 		$s .= qq|>$Entitize{$$self{'_data'}{$_}{'value'} }</option>|;
 
 		push @html, $s;

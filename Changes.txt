@@ -1,5 +1,10 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
+1.12  Mon Dec 12 13:18:00 2005
+	- In sub popup_menu(), check the caller has set a default value before trying to use the default.
+		This stops an 'uninitialized' warning being emitted
+	- Add more patterns to MANIFEST.SKIP
+
 1.11  Wed Nov  9 15:38:00 2005
 	- Add a new parameter to new() and set(): options.
 		This takes a hash ref as its value, and allows you to specify any list of options
