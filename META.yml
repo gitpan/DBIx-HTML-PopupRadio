@@ -1,8 +1,8 @@
---- #YAML:1.0
+---
 name: DBIx-HTML-PopupRadio
-version: 1.12
+version: 1.13
 author:
-  - Ron Savage <ron@savage.net.au>
+  - 'Ron Savage <ron@savage.net.au>'
 abstract: Convert sql into a popup menu or radio group.
 license: artistic
 requires:
@@ -14,5 +14,5 @@ build_requires:
 provides:
   DBIx::HTML::PopupRadio:
     file: lib/DBIx/HTML/PopupRadio.pm
-    version: 1.12
+    version: 1.13
 generated_by: Module::Build version 0.2611

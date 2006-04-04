@@ -50,7 +50,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 
 );
-our $VERSION = '1.12';
+our $VERSION = '1.13';
 
 # -----------------------------------------------
 
@@ -205,7 +205,7 @@ sub popup_menu
 	for (sort{$$self{'_data'}{$a}{'order'} <=> $$self{'_data'}{$b}{'order'} } keys %{$$self{'_data'} })
 	{
 		$s = qq|<option value="$Entitize{$_}"|;
-		$s .= qq| selected="selected"| if (defined($$self{'_default'}) && ($$self{'_default'} eq $$self{'_data'}{$_}{'value'}) );
+		$s .= qq| selected="selected"| if (defined($$self{'_default'}) && (lc $$self{'_default'} eq lc $$self{'_data'}{$_}{'value'}) );
 		$s .= qq|>$Entitize{$$self{'_data'}{$_}{'value'} }</option>|;
 
 		push @html, $s;
@@ -241,7 +241,7 @@ sub radio_group
 
 		if ($$self{'_default'})
 		{
-			$s .= qq| checked="checked"| if ($$self{'_default'} eq $$self{'_data'}{$_}{'value'});
+			$s .= qq| checked="checked"| if (lc $$self{'_default'} eq lc $$self{'_data'}{$_}{'value'});
 		}
 		else
 		{
@@ -369,6 +369,9 @@ Ie By the time you call one of the latter 2 methods, dbh must be set.
 Pass in the string (from SQL column 2) which is to be the default item on the popup
 menu or radio group. You supply here the visible menu item, not the value associated with
 that menu item.
+
+Starting with V 1.13, a case-insensitive match is used to compare the value provided here with the
+values read in from the database.
 
 If default is not given a value, the first menu item becomes the default.
 

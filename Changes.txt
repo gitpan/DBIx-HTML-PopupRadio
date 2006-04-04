@@ -1,5 +1,9 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
+1.13  Wed Mar 22 10:57:00 2006
+	- In subs popup_menu and radio_group, use a case-insensitive compare when trying to set the default menu item.
+		I need this in one project because the menu values and the default come from different databases
+
 1.12  Mon Dec 12 13:18:00 2005
 	- In sub popup_menu(), check the caller has set a default value before trying to use the default.
 		This stops an 'uninitialized' warning being emitted
