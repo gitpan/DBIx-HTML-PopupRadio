@@ -1,5 +1,16 @@
 Revision history for Perl extension DBIx::HTML::PopupRadio.
 
+1.16  Sun Feb 21 12:55:00 2010
+	- Remove text 'All rights reserved' (for Debian licensing).
+	- Remove POD heads 'Required Modules' and 'Changes'.
+
+1.15  Wed Feb 10 14:01:48 2010
+	- MANIFEST.SKIP updated to exclude MYMETA.yml. Add MYMETA.yml.
+
+1.14  Fri Nov 13 13:20:00 2009
+	- Run dos2unix
+	- Rename Changes.txt to CHANGES
+
 1.13  Wed Mar 22 10:57:00 2006
 	- In subs popup_menu and radio_group, use a case-insensitive compare when trying to set the default menu item.
 		I need this in one project because the menu values and the default come from different databases
